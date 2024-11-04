@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+
 
 function App() {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        });
+    }
+    
+    // Запросить разрешение на отправку уведомлений
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        new Notification('Уведомление', {
+          body: 'Это пример уведомления!',
+        });
+      }
+    });
+  }, []);
+
+  const sendNotification = () => {
+    if (Notification.permission === 'granted') {
+      new Notification('Уведомление', {
+        body: 'Это пример уведомления при нажатии кнопки!',
+      });
+    } else {
+      console.log('Нет разрешения на отправку уведомлений');
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Добро пожаловать в PWA React!</h1>
+      <button onClick={sendNotification}>Отправить уведомление</button>
     </div>
   );
 }
