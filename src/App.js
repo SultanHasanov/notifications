@@ -20,6 +20,20 @@ function App() {
     });
   }, []);
 
+
+  const requestNotificationPermission = async () => {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      console.log('Разрешение на уведомления предоставлено');
+    } else {
+      console.log('Разрешение на уведомления отклонено');
+    }
+  };
+  
+  // Вызовите эту функцию, когда вы хотите запросить разрешение
+  requestNotificationPermission();
+  
+
   const sendNotification = () => {
     if (Notification.permission === 'granted') {
       new Notification('Уведомление', {

@@ -70,3 +70,12 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+self.addEventListener('push', function(event) {
+  const title = event.data ? event.data.title : 'Уведомление';
+  const options = {
+    body: event.data ? event.data.body : 'У вас новое уведомление!',
+    icon: 'icon.png', // замените на путь к вашему значку уведомления
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
